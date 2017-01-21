@@ -2,8 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const hbs = require('hbs');
 var request = require('request');
-// var Client = require('node-rest-client').Client;
-// var client = new Client();
 
 var app = express();
 app.set('view engine', 'hbs');
@@ -11,31 +9,59 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// request('https://api.beta.yaas.io/hybris/product/v2/conuhacks17/products', function (error, response, body) {
+//   if (!error && response.statusCode == 200) {
+//     console.log(body) // Show the HTML for the Google homepage.
+//   }
+// })
+
 var request = require('request');
-request('https://api.beta.yaas.io/hybris/product/v2/conuhacks17/products', function (error, response, body) {
-  if (!error && response.statusCode == 200) {
-    console.log(body) // Show the HTML for the Google homepage.
-  }
-})
-//
-// var productkey;
-// app.post('/generate', function(req, res) {
-//
-//   console.log(req.body);
-//
-//   // Yaas create products
-//
-//
-//   productkey = req.body.name;
-//  res.redirect('/generate');
-// });
-//
-// app.get('/generate', (req, res) =>{
-//   res.render('generate.hbs',{
-//     productName: productkey,
-//   });
-// });
-//
+
+//Lets configure and request
+request({
+    url: 'https://api.beta.yaas.io/hybris/product/v2/conuhacks17/products', //URL to hit
+    //qs: {from: 'blog example', time: +new Date()}, //Query string data
+    method: 'POST', //Specify the method
+    headers: { //We can define headers too
+        'Authorization': 'Bearer 021-c1127912-41c8-429e-94d7-17db386b617e',
+        'Content-Language': 'en'
+    },
+    json: {
+        name: 'testestest',
+        code: 'q1',
+        description: 'blahaa'
+    },
+    function(error, response, body){
+    if(error) {
+        console.log(error);
+    } else {
+        console.log(response.statusCode, body);
+    }}
+  });
+
+var productkey;
+app.post('/generate', function(req, res) {
+
+  console.log(req.body);
+
+  // Yaas create products
+
+
+  productkey = req.body.name;
+ res.redirect('/generate');
+});
+
+
+
+
+
+
+app.get('/generate', (req, res) =>{
+  res.render('generate.hbs',{
+    productName: productkey,
+  });
+});
+
 
 app.listen(3000, () => {
   console.log('Server is up on port 3000');
