@@ -15,21 +15,55 @@ app.use(bodyParser.json());
 //   }
 // })
 
-var request = require('request');
 
-//Lets configure and request
-request({
+var productName;
+var productCode;
+var productDescription;
+
+app.post('/generate', function(req, res) {
+
+  console.log(req.body);
+
+  // Yaas create products
+
+  productName = req.body.product;
+  productCode = req.body.code;
+  productDescription = req.body.description;
+  var request = require('request');
+
+  //   request({
+  //   url: 'https://api.yaas.io/hybris/oauth2/v1/token',
+  //   method: 'POST', //Specify the method
+  //   json: {
+  //       client_id: "DhhN0a4g8IwmkSlRmwDPM78ICQwCYXPI",
+  //       client_secret: "dLQf7NjyDGQ5zPk0",
+  //       grant_type: "client_credentials",
+  //       scope: "hybris.tenant=conuhacks17 hybris.product_create hybris.product_publish"
+  //   },
+
+  //   function(error, response, body){
+  //   if(error) {
+  //       console.log("error");
+  //   } else {
+  //       // console.log(response.statusCode, body);
+  //       console.log("work");
+  //   }}
+  // });
+
+  request({
+
     url: 'https://api.beta.yaas.io/hybris/product/v2/conuhacks17/products', //URL to hit
     //qs: {from: 'blog example', time: +new Date()}, //Query string data
     method: 'POST', //Specify the method
     headers: { //We can define headers too
-        'Authorization': 'Bearer 021-c1127912-41c8-429e-94d7-17db386b617e',
+        'Authorization': 'Bearer 022-18d6f179-473a-4ed0-9dc1-046bd3617920',
         'Content-Language': 'en'
     },
     json: {
-        name: 'testestest',
-        code: 'q1',
-        description: 'blahaa'
+        name: productName,
+        code: productCode,
+        description: productDescription,
+        published: true
     },
     function(error, response, body){
     if(error) {
@@ -38,71 +72,22 @@ request({
         console.log(response.statusCode, body);
     }}
   });
-
-var productkey;
-app.post('/generate', function(req, res) {
-
-  console.log(req.body);
-
-  // Yaas create products
-
-
-  productkey = req.body.name;
  res.redirect('/generate');
 });
 
 
 
 
-
-
 app.get('/generate', (req, res) =>{
   res.render('generate.hbs',{
-    productName: productkey,
+    productName: productCode,
   });
 });
+
+
+
 
 
 app.listen(3000, () => {
   console.log('Server is up on port 3000');
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// app.get('/', (req, res) => {
-//   // res.send('<h1>Hello Express!</h1>');
-//   res.send({
-//     name: 'Andrew',
-//     likes: [
-//       'Biking',
-//       'Cities'
-//     ]
-//   });
-// });
-
-// app.get('/about', (req, res) => {
-//   res.send('About Page');
-// });
-
-// /bad - send back json with errorMessage
-// app.get('/bad', (req, res) => {
-//   res.send({
-//     errorMessage: 'Unable to handle request'
-//   });
-// });
